@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface clientRepository extends JpaRepository<WebUser, Long> {
+public interface WebUserRepository extends JpaRepository<WebUser, Long> {
 
 	Optional<WebUser> findByNameIgnoreCase(String username);
 }

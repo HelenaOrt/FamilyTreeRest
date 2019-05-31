@@ -1,7 +1,3 @@
-/******************************************************************************
- * Copyright (c) 2019. Cristian Gonzalez Morante                              *
- ******************************************************************************/
-
 package com.FamilyTreeRest.FamilyTreeRest.models;
 
 import com.FamilyTreeRest.FamilyTreeRest.entities.Person;
@@ -13,7 +9,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class PersonModel {
+public class PersonModelSave {
 
 	private Long id;
 
@@ -33,18 +29,26 @@ public class PersonModel {
 	@Size(min = 3)
 	private String country;
 
+	private Person father;
 
-	private Set<PersonModel> sonsSet;
+	public static PersonModelSave from(Person person) {
+		PersonModelSave personModelSave = new PersonModelSave();
+		personModelSave.setId(person.getId());
+		personModelSave.setName(person.getName());
+		personModelSave.setLastName(person.getLastName());
+		personModelSave.setAge(person.getAge());
+		personModelSave.setCountry(person.getCountry());
+		personModelSave.setFather(person.getFather());
+		return personModelSave;
+	}
 
-	public static PersonModel from(Person person) {
-		PersonModel personModel = new PersonModel();
-		personModel.setId(person.getId());
-		personModel.setName(person.getName());
-		personModel.setLastName(person.getLastName());
-		personModel.setAge(person.getAge());
-		personModel.setCountry(person.getCountry());
-		personModel.setSonsSet(person.getSonsSet().stream().map(PersonModel::from).collect(Collectors.toSet()));
-		return personModel;
+	public Person getFather() {
+		return father;
+	}
+
+	public PersonModelSave setFather(Person father) {
+		this.father = father;
+		return this;
 	}
 
 	public Optional<Long> getId() {
@@ -87,12 +91,4 @@ public class PersonModel {
 		this.country = country;
 	}
 
-	public Set<PersonModel> getSonsSet() {
-		return sonsSet;
-	}
-
-	public PersonModel setSonsSet(Set<PersonModel> sonsSet) {
-		this.sonsSet = sonsSet;
-		return this;
-	}
 }

@@ -5,6 +5,7 @@
 package com.FamilyTreeRest.FamilyTreeRest.configuration;
 
 import com.FamilyTreeRest.FamilyTreeRest.components.AuthenticationTokenFilter;
+import com.FamilyTreeRest.FamilyTreeRest.constants.AuthorityName;
 import com.FamilyTreeRest.FamilyTreeRest.constants.properties.JwtProperties;
 import com.FamilyTreeRest.FamilyTreeRest.services.impl.CustomUserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,8 +78,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.addFilter(new AuthenticationTokenFilter(jwtProperties, authenticationManagerBean()))
 			.authorizeRequests()
 			.antMatchers(HttpMethod.GET).permitAll()
+			.antMatchers(HttpMethod.DELETE).hasAuthority(AuthorityName.ROLE_ADMIN.toString())
 			.antMatchers("/auth/login").permitAll()
 			.anyRequest().permitAll();
+			//.anyRequest().hasAnyRole("ADMIN", "USER");
 	}
 
 }

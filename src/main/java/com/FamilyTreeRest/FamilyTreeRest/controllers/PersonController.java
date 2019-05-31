@@ -9,6 +9,7 @@ import com.FamilyTreeRest.FamilyTreeRest.exceptions.EntityNotFoundException;
 import com.FamilyTreeRest.FamilyTreeRest.exceptions.IdRequiredException;
 import com.FamilyTreeRest.FamilyTreeRest.exceptions.IllegalOperationException;
 import com.FamilyTreeRest.FamilyTreeRest.models.PersonModel;
+import com.FamilyTreeRest.FamilyTreeRest.models.PersonModelSave;
 import com.FamilyTreeRest.FamilyTreeRest.services.PersonService;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,13 +30,18 @@ public class PersonController {
 		return personService.findAll();
 	}
 
+	@GetMapping("/people/save")
+	public List<PersonModelSave> findAllSave() {
+		return personService.fatherModel();
+	}
+
 	@GetMapping("/people/{id}")
 	public PersonModel findOne(@PathVariable long id) throws EntityNotFoundException {
 		return personService.findOne(id);
 	}
 
 	@PostMapping("/people")
-	public PersonModel save(@Valid @RequestBody PersonModel personModel) throws DuplicatedEntityException, DuplicatedEntityException {
+	public PersonModel save(@Valid @RequestBody PersonModelSave personModel) throws DuplicatedEntityException, DuplicatedEntityException, IdRequiredException, IllegalOperationException {
 		return personService.save(personModel);
 	}
 
