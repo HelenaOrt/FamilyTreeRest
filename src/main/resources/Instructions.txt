@@ -1,0 +1,12 @@
+Elaborar una API rest que sirva los datos de personas que tienen nombre, apellido, edad y país de nacimiento.
+Estas personas pueden tener hijos que también son personas, por lo que estos hijos pueden tener hijos...
+
+De esta manera, partiendo de la información de cualquier persona podríamos ver todo su árbol familiar (de hijos)
+ hasta el último de la familia
+
+ Hacer un CRUD, implementando creación, edición, eliminación y obtención de personas
+
+ Los usuarios sin autenticar solo pueden pedir peticiones tipo GET, para cualquier otra petición es necesario estar
+ autenticado. Además el endpoint tipo DELETE solo puede llamar a los usuarios con rol ADMIN
+
+ También se necesita la creación de test que comprueban que todos los endpoint devuelven los datos y codigos esperados
