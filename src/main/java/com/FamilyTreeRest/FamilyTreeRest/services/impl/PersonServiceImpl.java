@@ -81,25 +81,35 @@ public class PersonServiceImpl implements PersonService {
 	}
 
 	@Override
-	public PersonModel update(long id, PersonModel personModel) throws EntityNotFoundException, DuplicatedEntityException, IdRequiredException, IllegalOperationException {
-		long modelId = personModel.getId().orElseThrow(IdRequiredException::new);
+	public PersonModelSave update(long id, PersonModelSave personModelSave) throws EntityNotFoundException, DuplicatedEntityException, IdRequiredException, IllegalOperationException {
+		long modelId = personModelSave.getId().orElseThrow(IdRequiredException::new);
 
 		if (id != modelId)
-			throw new IllegalOperationException("IDs doesn't match");
+			throw new IllegalOperationException("El Id en base de datos no coincide con el introducido, intentelo de nuevo");
+
+		long fatherId = personModelSave.getFatherId().get();
+
+		if (fatherId != personRepository.findById(id).get().getFather().getId())
+			throw new IllegalOperationException("Modificar el parentesco podría alterar su árbol genealógico." +
+												"Antes de realizar cualquier cambio póngase en contacto con el ADMIN");
 
 		Person person = personRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(Person.class, id));
-		Optional<Person> duplicatedClient = personRepository.findByNameIgnoreCase(personModel.getName());
-		if (duplicatedClient.isPresent()) {
-			if (duplicatedClient.get().getId() != person.getId()) {
-				throw new DuplicatedEntityException();
-			}
+		Optional<Person> father = personRepository.findById(personModelSave.getFatherId().get());
+		if (!father.get().getLastName().equalsIgnoreCase(personModelSave.getLastName())) {
+			throw new IllegalOperationException("El apellido debe ser igual que el de su padre. " +
+												"Si aún así desea modificarlo pongase en contacto con el ADMIN");
+		} else {
+			person.setLastName(personModelSave.getLastName());
 		}
-		if (personRepository.findByNameIgnoreCase(personModel.getName()).isPresent())
-			throw new DuplicatedEntityException();
 
-		person.setName(personModel.getName());
+		if (personModelSave.getAge() > father.get().getAge())
+			throw new IllegalOperationException("No puede tener más años que su padre");
 
-		return PersonModel.from(personRepository.save(person));
+		person.setName(personModelSave.getName());
+		person.setCountry(personModelSave.getCountry());
+		person.setAge(personModelSave.getAge());
+
+		return PersonModelSave.from(personRepository.save(person));
 	}
 
 	@Override

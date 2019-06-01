@@ -90,6 +90,10 @@ public class PersonModel {
 		return sonsSet;
 	}
 
+	public void addSonModel(PersonModel personModel){
+		sonsSet.add(personModel);
+	}
+
 	public void setSonsSet(Set<PersonModel> sonsSet) {
 		this.sonsSet = sonsSet;
 	}

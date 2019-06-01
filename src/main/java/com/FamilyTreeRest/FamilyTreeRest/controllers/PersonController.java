@@ -42,8 +42,8 @@ public class PersonController {
 	}
 
 	@PutMapping("/people/{id}")
-	public PersonModel update(@PathVariable long id, @RequestBody PersonModel personModel) throws DuplicatedEntityException, IllegalOperationException, IdRequiredException, IdRequiredException, IllegalOperationException, EntityNotFoundException {
-		return personService.update(id, personModel);
+	public PersonModelSave update(@PathVariable long id, @RequestBody PersonModelSave personModelSave) throws DuplicatedEntityException, IllegalOperationException, IdRequiredException, IdRequiredException, IllegalOperationException, EntityNotFoundException {
+		return personService.update(id, personModelSave);
 	}
 
 	@DeleteMapping("/people/{id}")

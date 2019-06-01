@@ -22,7 +22,7 @@ public interface PersonService {
 
 	PersonModelSave save(PersonModelSave personModelSave) throws Exception;
 
-	PersonModel update(long id, PersonModel personModel) throws DuplicatedEntityException, IdRequiredException, IllegalOperationException, EntityNotFoundException;
+	PersonModelSave update(long id, PersonModelSave personModelSave) throws EntityNotFoundException, DuplicatedEntityException, IdRequiredException, IllegalOperationException;
 
 	void delete(long id) throws EntityNotFoundException;
 
