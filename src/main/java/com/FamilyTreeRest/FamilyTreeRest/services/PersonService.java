@@ -4,12 +4,11 @@
 
 package com.FamilyTreeRest.FamilyTreeRest.services;
 
-import com.FamilyTreeRest.FamilyTreeRest.entities.Person;
+import com.FamilyTreeRest.FamilyTreeRest.entities.PersonModel;
 import com.FamilyTreeRest.FamilyTreeRest.exceptions.DuplicatedEntityException;
 import com.FamilyTreeRest.FamilyTreeRest.exceptions.EntityNotFoundException;
 import com.FamilyTreeRest.FamilyTreeRest.exceptions.IdRequiredException;
 import com.FamilyTreeRest.FamilyTreeRest.exceptions.IllegalOperationException;
-import com.FamilyTreeRest.FamilyTreeRest.models.PersonModel;
 import com.FamilyTreeRest.FamilyTreeRest.models.PersonModelSave;
 
 import java.util.List;

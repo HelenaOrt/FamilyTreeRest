@@ -1,13 +1,11 @@
 package com.FamilyTreeRest.FamilyTreeRest.models;
 
-import com.FamilyTreeRest.FamilyTreeRest.entities.Person;
+import com.FamilyTreeRest.FamilyTreeRest.entities.PersonModel;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 public class PersonModelSave {
 
@@ -29,24 +27,24 @@ public class PersonModelSave {
 	@Size(min = 3)
 	private String country;
 
-	private Person father;
+	private PersonModel father;
 
-	public static PersonModelSave from(Person person) {
+	public static PersonModelSave from(PersonModel personModel) {
 		PersonModelSave personModelSave = new PersonModelSave();
-		personModelSave.setId(person.getId());
-		personModelSave.setName(person.getName());
-		personModelSave.setLastName(person.getLastName());
-		personModelSave.setAge(person.getAge());
-		personModelSave.setCountry(person.getCountry());
-		personModelSave.setFather(person.getFather());
+		personModelSave.setId(personModel.getId());
+		personModelSave.setName(personModel.getName());
+		personModelSave.setLastName(personModel.getLastName());
+		personModelSave.setAge(personModel.getAge());
+		personModelSave.setCountry(personModel.getCountry());
+		personModelSave.setFather(personModel.getFather());
 		return personModelSave;
 	}
 
-	public Person getFather() {
+	public PersonModel getFather() {
 		return father;
 	}
 
-	public PersonModelSave setFather(Person father) {
+	public PersonModelSave setFather(PersonModel father) {
 		this.father = father;
 		return this;
 	}

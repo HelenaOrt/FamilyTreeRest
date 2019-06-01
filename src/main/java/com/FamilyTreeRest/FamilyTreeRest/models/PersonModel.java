@@ -4,8 +4,6 @@
 
 package com.FamilyTreeRest.FamilyTreeRest.models;
 
-import com.FamilyTreeRest.FamilyTreeRest.entities.Person;
-
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -36,14 +34,14 @@ public class PersonModel {
 
 	private Set<PersonModel> sonsSet;
 
-	public static PersonModel from(Person person) {
+	public static PersonModel from(com.FamilyTreeRest.FamilyTreeRest.entities.PersonModel person) {
 		PersonModel personModel = new PersonModel();
 		personModel.setId(person.getId());
 		personModel.setName(person.getName());
 		personModel.setLastName(person.getLastName());
 		personModel.setAge(person.getAge());
 		personModel.setCountry(person.getCountry());
-		personModel.setSonsSet(person.getSonsSet().stream().map(PersonModel::from).collect(Collectors.toSet()));
+		personModel.setSonsSet(person.getSonsSet().stream().map(com.FamilyTreeRest.FamilyTreeRest.models.PersonModel::from).collect(Collectors.toSet()));
 		return personModel;
 	}
 
