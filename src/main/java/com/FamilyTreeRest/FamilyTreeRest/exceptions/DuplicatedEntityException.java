@@ -11,4 +11,8 @@ public class DuplicatedEntityException extends ConflictException {
 	public DuplicatedEntityException() {
 		super("Duplicated entity");
 	}
+
+	public DuplicatedEntityException(String message) {
+		super(message);
+	}
 }

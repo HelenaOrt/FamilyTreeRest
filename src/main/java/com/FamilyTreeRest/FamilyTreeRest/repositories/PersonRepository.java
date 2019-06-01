@@ -4,17 +4,17 @@
 
 package com.FamilyTreeRest.FamilyTreeRest.repositories;
 
-import com.FamilyTreeRest.FamilyTreeRest.entities.PersonModel;
+import com.FamilyTreeRest.FamilyTreeRest.entities.Person;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
 @Repository
-public interface PersonRepository extends JpaRepository<PersonModel, Long> {
+public interface PersonRepository extends JpaRepository<Person, Long> {
 
-	Optional<PersonModel> findByNameIgnoreCase(String name);
+	Optional<Person> findByNameIgnoreCase(String name);
 
-	Optional<PersonModel> findByLastNameIgnoreCase(String surname);
+	Optional<Person> findByLastNameIgnoreCase(String surname);
 
 }

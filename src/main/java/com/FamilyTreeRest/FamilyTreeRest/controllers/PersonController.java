@@ -30,10 +30,6 @@ public class PersonController {
 		return personService.findAll();
 	}
 
-	@GetMapping("/people/save")
-	public List<PersonModelSave> findAllSave() {
-		return personService.fatherModel();
-	}
 
 	@GetMapping("/people/{id}")
 	public PersonModel findOne(@PathVariable long id) throws EntityNotFoundException {
@@ -41,7 +37,7 @@ public class PersonController {
 	}
 
 	@PostMapping("/people")
-	public PersonModel save(@Valid @RequestBody PersonModelSave personModel) throws DuplicatedEntityException, DuplicatedEntityException, IdRequiredException, IllegalOperationException {
+	public PersonModel save(@Valid @RequestBody PersonModel personModel) throws DuplicatedEntityException, DuplicatedEntityException, IdRequiredException, IllegalOperationException, EntityNotFoundException {
 		return personService.save(personModel);
 	}
 

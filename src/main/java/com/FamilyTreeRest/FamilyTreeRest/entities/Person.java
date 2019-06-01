@@ -1,5 +1,7 @@
 package com.FamilyTreeRest.FamilyTreeRest.entities;
 
+import com.FamilyTreeRest.FamilyTreeRest.exceptions.IllegalOperationException;
+
 import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -7,7 +9,7 @@ import javax.validation.constraints.Size;
 import java.util.Set;
 
 @Entity
-public class PersonModel {
+public class Person {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,10 +31,10 @@ public class PersonModel {
 	private String country;
 
 	@ManyToOne
-	private PersonModel father;
+	private Person father;
 
 	@OneToMany(mappedBy = "father", cascade ={CascadeType.REMOVE, CascadeType.REFRESH})
-	private Set<PersonModel> sonsSet;
+	private Set<Person> sonsSet;
 
 
 	public long getId() {
@@ -75,23 +77,23 @@ public class PersonModel {
 		this.country = country;
 	}
 
-	public Set<PersonModel> getSonsSet() {
+	public Set<Person> getSonsSet() {
 		return sonsSet;
 	}
 
-	public void setSonsSet(Set<PersonModel> sonsSet) {
+	public void setSonsSet(Set<Person> sonsSet) {
 		this.sonsSet = sonsSet;
 	}
 
-	public void addSon(PersonModel personModel){
-		this.sonsSet.add(personModel);
+	public void addSon(Person person){
+		this.sonsSet.add(person);
 	}
 
-	public PersonModel getFather() {
+	public Person getFather() {
 		return father;
 	}
 
-	public void setFather(PersonModel father) {
+	public void setFather(Person father) {
 		this.father = father;
 	}
 
