@@ -29,7 +29,7 @@ public class PersonModelSave {
 	@Size(min = 3)
 	private String country;
 
-	private Person father;
+	private Long fatherId;
 
 	public static PersonModelSave from(Person person) {
 		PersonModelSave personModelSave = new PersonModelSave();
@@ -38,17 +38,16 @@ public class PersonModelSave {
 		personModelSave.setLastName(person.getLastName());
 		personModelSave.setAge(person.getAge());
 		personModelSave.setCountry(person.getCountry());
-		personModelSave.setFather(person.getFather());
+		personModelSave.setFatherId(person.getFather().getId());
 		return personModelSave;
 	}
 
-	public Person getFather() {
-		return father;
+	public Optional<Long> getFatherId() {
+		return Optional.ofNullable(fatherId);
 	}
 
-	public PersonModelSave setFather(Person father) {
-		this.father = father;
-		return this;
+	public void setFatherId(long fatherId) {
+		this.fatherId = fatherId;
 	}
 
 	public Optional<Long> getId() {

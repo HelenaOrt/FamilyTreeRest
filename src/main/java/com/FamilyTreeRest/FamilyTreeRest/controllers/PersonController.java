@@ -37,8 +37,8 @@ public class PersonController {
 	}
 
 	@PostMapping("/people")
-	public PersonModel save(@Valid @RequestBody PersonModel personModel) throws DuplicatedEntityException, DuplicatedEntityException, IdRequiredException, IllegalOperationException, EntityNotFoundException {
-		return personService.save(personModel);
+	public PersonModelSave save(@Valid @RequestBody PersonModelSave personModelSave) throws Exception {
+		return personService.save(personModelSave);
 	}
 
 	@PutMapping("/people/{id}")

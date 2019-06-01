@@ -33,8 +33,6 @@ public class PersonModel {
 	@Size(min = 3)
 	private String country;
 
-	private long fatherId;
-
 	private Set<PersonModel> sonsSet;
 
 	public static PersonModel from(Person person) {
@@ -44,17 +42,8 @@ public class PersonModel {
 		personModel.setLastName(person.getLastName());
 		personModel.setAge(person.getAge());
 		personModel.setCountry(person.getCountry());
-		personModel.setFatherId(person.getFather().getId());
 		personModel.setSonsSet(person.getSonsSet().stream().map(PersonModel::from).collect(Collectors.toSet()));
 		return personModel;
-	}
-
-	public long getFatherId() {
-		return fatherId;
-	}
-
-	public void setFatherId(long fatherId) {
-		this.fatherId = fatherId;
 	}
 
 	public Optional<Long> getId() {
@@ -103,5 +92,17 @@ public class PersonModel {
 
 	public void setSonsSet(Set<PersonModel> sonsSet) {
 		this.sonsSet = sonsSet;
+	}
+
+	@Override
+	public String toString() {
+		return "PersonModel{" +
+			   "id=" + id +
+			   ", name='" + name + '\'' +
+			   ", lastName='" + lastName + '\'' +
+			   ", age=" + age +
+			   ", country='" + country + '\'' +
+			   ", sonsSet=" + sonsSet +
+			   '}';
 	}
 }

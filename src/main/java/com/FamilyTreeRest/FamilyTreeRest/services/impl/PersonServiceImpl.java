@@ -6,16 +6,16 @@ package com.FamilyTreeRest.FamilyTreeRest.services.impl;
 
 import com.FamilyTreeRest.FamilyTreeRest.controllers.PersonController;
 import com.FamilyTreeRest.FamilyTreeRest.entities.Person;
-import com.FamilyTreeRest.FamilyTreeRest.exceptions.DuplicatedEntityException;
-import com.FamilyTreeRest.FamilyTreeRest.exceptions.EntityNotFoundException;
-import com.FamilyTreeRest.FamilyTreeRest.exceptions.IdRequiredException;
-import com.FamilyTreeRest.FamilyTreeRest.exceptions.IllegalOperationException;
+import com.FamilyTreeRest.FamilyTreeRest.exceptions.*;
+import com.FamilyTreeRest.FamilyTreeRest.exceptions.generic.ConflictException;
 import com.FamilyTreeRest.FamilyTreeRest.models.PersonModel;
 import com.FamilyTreeRest.FamilyTreeRest.models.PersonModelSave;
 import com.FamilyTreeRest.FamilyTreeRest.repositories.PersonRepository;
 import com.FamilyTreeRest.FamilyTreeRest.services.PersonService;
+import com.sun.xml.internal.ws.api.message.ExceptionHasMessage;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityExistsException;
@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 @Service
 public class PersonServiceImpl implements PersonService {
 
-	private static final Log LOGGER = LogFactory.getLog(PersonController.class);
+	private static final Log LOGGER = LogFactory.getLog(PersonServiceImpl.class);
 
 	private final PersonRepository personRepository;
 
@@ -49,40 +49,35 @@ public class PersonServiceImpl implements PersonService {
 	}
 
 	@Override
-	public PersonModel save(PersonModel personModel) throws DuplicatedEntityException, IllegalOperationException, IdRequiredException, EntityNotFoundException {
-		if (personRepository.findByNameIgnoreCase(personModel.getName()).isPresent()){
-			if(personRepository.findByLastNameIgnoreCase(personModel.getLastName()).isPresent()){
-				throw new DuplicatedEntityException();
-			}
-		}
-		Person person = new Person();
+	public PersonModelSave save(PersonModelSave personModel) throws Exception {
 
-		//Hacer excepción por si no hay padre con ese id
-		long id = personModel.getFatherId();
-		Person father = personRepository.findById(id).get();
-		/*if(personModel.getFather()!=null){
-			person.setFather(personRepository.findById(fatherId).orElseThrow(()->new EntityNotFoundException(Person.class, fatherId)));
-		}else{
+		Person person = new Person();
+		if (!personModel.getFatherId().isPresent())
+			throw new EntityNotFoundException(Person.class, personModel.getFatherId().get());
+
+		if (personModel.getFatherId().get() == 0) {
 			person.setFather(null);
-		}*/
+			personModel.setFatherId(0);
+		} else {
+			long id = personModel.getFatherId().get();
+			if (personRepository.findById(id).isPresent()) {
+				Person father = personRepository.findById(id).get();
+				if (!personModel.getLastName().equalsIgnoreCase(father.getLastName()))
+					throw new IllegalOperationException("El padre y el hijo deben tener el mismo apellido");
+				if (personModel.getAge() >= father.getAge()) {
+					throw new IllegalOperationException("El hijo no puede tener los mismos años que el padre o más");
+				}
+			}
+			person.setFather(personRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(Person.class, id)));
+		}
+
 		person.setName(personModel.getName());
 		person.setLastName(personModel.getLastName());
 		person.setAge(personModel.getAge());
 		person.setCountry(personModel.getCountry());
-		//person.setFather(father);
-		if(id == 0){
-			person.setFather(null);
-			personModel.setFatherId(0);
-		}else {
-			person.setFather(personRepository.findById(father.getId()).orElseThrow(
-					()->new EntityNotFoundException(Person.class, father.getId())));
-			personModel.setFatherId(father.getId());
-		}
-		personModel.setId(person.getId());
-
 
 		LOGGER.info("METODO: 'savePerson'-- \nPARAMS: '" + personModel + "'" + person);
-		return personModel;
+		return PersonModelSave.from(personRepository.save(person));
 	}
 
 	@Override
