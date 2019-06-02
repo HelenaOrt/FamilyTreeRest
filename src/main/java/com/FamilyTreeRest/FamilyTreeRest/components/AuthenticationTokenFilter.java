@@ -25,7 +25,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
-//este filtro es para autenticar con el token
 public class AuthenticationTokenFilter extends BasicAuthenticationFilter {
 
 	private final JwtProperties jwtProperties;

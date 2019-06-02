@@ -37,57 +37,24 @@ import static org.mockito.Mockito.when;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class FindOnePersonTest {
 
-	@InjectMocks
-	private PersonController personController;
-
-	@Mock
-	private PersonRepository personRepository;
-
 	@Autowired
 	public TestRestTemplate testRestTemplate;
 
-	@Before
-	public void init(){
-		MockitoAnnotations.initMocks(this);
-	}
-
-
 	@Test
-	public void givenValidTerm_shouldSuccessWith200AndReturnAObjectPerson(){
+	public void givenValidTerm_shouldSuccessWith200AndReturnAObjectPerson() {
 
 		UriComponents url = UriComponentsBuilder.newInstance().scheme("/people").path("/1").build();
 		ResponseEntity<PersonModel> result =
 				testRestTemplate.exchange("/people/1", HttpMethod.GET,
 										  new HttpEntity<>(new HttpHeaders()),
-										  new ParameterizedTypeReference<PersonModel>() {});
+										  new ParameterizedTypeReference<PersonModel>() {
+										  });
 
 		assertEquals(HttpStatus.OK, result.getStatusCode());
 		assertNotNull(result.getBody());
 	}
 
-
-	/*
-
-	@Test
-	public void givenValidId_shouldReturnExpectedPersonBody() throws JSONException {
-
-			HttpEntity<String> entity = new HttpEntity<String>(new HttpHeaders());
-			ResponseEntity<String> response = testRestTemplate.exchange("/people/{id]",
-					HttpMethod.GET, entity, String.class);
-
-			String expected = "{id: 1 ," +
-							  "name:Helena," +
-							  "lastName:Ortiz, " +
-							  "age:22, " +
-							  "country: Spain, " +
-							  "sonsSet: []}";
-
-			JSONAssert.assertEquals(expected, response.getBody(), false);
-		}
-
-		*/
-
-	}
+}
 
 
 

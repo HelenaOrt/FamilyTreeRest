@@ -28,6 +28,9 @@ public class Authority {
 		this.name = name;
 	}
 
+	public Authority() {
+	}
+
 	public Authority(List<WebUser> webUsers) {
 		this.webUsers = webUsers;
 	}

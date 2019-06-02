@@ -2,8 +2,7 @@
 	"info": {
 		"_postman_id": "321743e6-8d5b-4c7f-87a4-b6fe0eb252c1",
 		"name": "FamilyTree",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"documentation": "https://documenter.getpostman.com/view/7374573/S1TVYJGQ"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
@@ -247,7 +246,7 @@
 								"1"
 							]
 						},
-						"description": "Permite cambiar algunos de los valores de persona siempre que no entren en conflicto:\n\n- Nombre(no tiene restricciones salgo las de Spring Boot)\n- Apellido (Solo se puede cambiar sino tiene padre, porque se considera que un hijo debe tener el mismo apellido que su padre. No se tiene en cuenta la posibilidad de hijos adoptados ya que esa persona tiene un padre desconocido)\n- Edad (a no ser de que tenga padre y le pongas una edad mayor)\n- Country(no tiene restricciones salvo las de Spring Boot)\n- fatherId: no se puede cambiar NUNCA para evitar conflictos, para modificar este valor el ADMIN tendría que borrar el usuario y establecer la relación correctamente"
+						"description": "Permite cambiar algunos de los valores de persona siempre que no entren en conflicto:\n\n- Nombre(no tiene restricciones salgo las de Spring Boot)\n- Apellido (Solo se puede cambiar sino tiene padre, porque se considera que un hijo debe tener el mismo apellido que su padre. No se tiene en cuenta la posibilidad de hijos adoptados ya que esa persona tiene un padre desconocido)\n- Edad (a no ser de que tenga padre y le pongas una edad mayor)\n- Country(no tiene restricciones salvo las de Spring Boot)\n- fatherId: para poder modificar el padre el nuevo id del padre debe ser igual a los existentes en la base de datos, sino debería crear previamente \"un padre\". El padre y el hijo deben tener los mismos apellidos y la edad del hijo no puede ser nunca mayor o igual que la del padre de la base de datos"
 					},
 					"response": []
 				},

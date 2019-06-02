@@ -24,14 +24,23 @@ public class WebUser implements UserDetails {
 	public WebUser() {
 	}
 
+	@ManyToMany
+	private List<Authority> authorities;
+
+	public WebUser(List<Authority> authorities) {
+		this.authorities = authorities;
+	}
+
+	public WebUser(String name, String password) {
+		this.name = name;
+		this.password = password;
+	}
+
 	public WebUser(String name, String password, List<Authority> authorities) {
 		this.name = name;
 		this.password = password;
 		this.authorities = authorities;
 	}
-
-	@ManyToMany
-	private List<Authority> authorities;
 
 	public long getId() {
 		return id;
