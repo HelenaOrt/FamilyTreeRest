@@ -10,9 +10,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-//siempre hay que sobreescribirlo porque spring no sabe que repositorio usamos
-//aqui le dicen que cargue el WebUserRepository que es el que está autenticado
-
 @Service
 public class CustomUserDetailsServiceImpl implements UserDetailsService {
 

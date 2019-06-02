@@ -21,6 +21,15 @@ public class WebUser implements UserDetails {
 
 	private String password;
 
+	public WebUser() {
+	}
+
+	public WebUser(String name, String password, List<Authority> authorities) {
+		this.name = name;
+		this.password = password;
+		this.authorities = authorities;
+	}
+
 	@ManyToMany
 	private List<Authority> authorities;
 

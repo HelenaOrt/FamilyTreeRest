@@ -44,16 +44,13 @@ public class AuthenticationTokenFilter extends BasicAuthenticationFilter {
 			return;
 		}
 
-		// Remove the prefix
 		token = token.replace(jwtProperties.getPrefix(), "");
 
-		// Read and validate the jwt
 		Jws<Claims> jws = Jwts.parser()
 							  .setSigningKey(jwtProperties.getSecret().getBytes())
 							  .parseClaimsJws(token);
 
-		// Get the authorities and username from token and autenticate with them
-		//añadir try catch de la firma
+
 		List<GrantedAuthority> authorities = ((List<String>) jws.getBody().get("authorities")).stream()
 																							  .map(SimpleGrantedAuthority::new)
 																							  .collect(Collectors.toList());

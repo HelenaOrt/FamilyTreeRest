@@ -2,8 +2,10 @@ package com.FamilyTreeRest.FamilyTreeRest.Person;
 
 import com.FamilyTreeRest.FamilyTreeRest.controllers.PersonController;
 import com.FamilyTreeRest.FamilyTreeRest.entities.Person;
+import com.FamilyTreeRest.FamilyTreeRest.exceptions.EntityNotFoundException;
 import com.FamilyTreeRest.FamilyTreeRest.models.PersonModel;
 import com.FamilyTreeRest.FamilyTreeRest.repositories.PersonRepository;
+import com.oracle.webservices.internal.api.message.ContentType;
 import com.sun.deploy.net.HttpResponse;
 import org.json.JSONException;
 import org.junit.Before;
@@ -21,7 +23,9 @@ import org.springframework.http.*;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
+import org.springframework.web.util.UriTemplate;
 
+import java.io.IOException;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -60,7 +64,6 @@ public class FindOnePersonTest {
 		assertEquals(HttpStatus.OK, result.getStatusCode());
 		assertNotNull(result.getBody());
 	}
-
 
 
 	/*

@@ -42,6 +42,7 @@ public class PersonModel {
 		personModel.setLastName(person.getLastName());
 		personModel.setAge(person.getAge());
 		personModel.setCountry(person.getCountry());
+
 		personModel.setSonsSet(person.getSonsSet().stream().map(PersonModel::from).collect(Collectors.toSet()));
 		return personModel;
 	}

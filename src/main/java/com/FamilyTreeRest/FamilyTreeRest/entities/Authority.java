@@ -24,6 +24,14 @@ public class Authority {
 	@ManyToMany(mappedBy = "authorities")
 	private List<WebUser> webUsers;
 
+	public Authority(@NotNull AuthorityName name) {
+		this.name = name;
+	}
+
+	public Authority(List<WebUser> webUsers) {
+		this.webUsers = webUsers;
+	}
+
 	public long getId() {
 		return id;
 	}
