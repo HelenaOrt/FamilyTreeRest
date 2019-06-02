@@ -26,8 +26,6 @@ import java.util.stream.Collectors;
 @Service
 public class PersonServiceImpl implements PersonService {
 
-	private static final Log LOGGER = LogFactory.getLog(PersonServiceImpl.class);
-
 	private final PersonRepository personRepository;
 
 	public PersonServiceImpl(PersonRepository personRepository) {
@@ -50,7 +48,6 @@ public class PersonServiceImpl implements PersonService {
 
 	@Override
 	public PersonModelSave save(PersonModelSave personModelSave) throws Exception {
-
 
 		Person person = new Person();
 		if(personModelSave.getFatherId().isPresent())
@@ -122,7 +119,13 @@ public class PersonServiceImpl implements PersonService {
 		person.setCountry(personModelSave.getCountry());
 		person.setAge(personModelSave.getAge());
 
-		return PersonModelSave.from(personRepository.save(person));
+		try{
+			return PersonModelSave.from(personRepository.save(person));
+		}catch (Exception e){
+			e.getMessage();
+		}finally {
+			return PersonModelSave.from(personRepository.save(person));
+		}
 	}
 
 	@Override

@@ -99,15 +99,4 @@ public class PersonModel {
 		this.sonsSet = sonsSet;
 	}
 
-	@Override
-	public String toString() {
-		return "PersonModel{" +
-			   "id=" + id +
-			   ", name='" + name + '\'' +
-			   ", lastName='" + lastName + '\'' +
-			   ", age=" + age +
-			   ", country='" + country + '\'' +
-			   ", sonsSet=" + sonsSet +
-			   '}';
-	}
 }
