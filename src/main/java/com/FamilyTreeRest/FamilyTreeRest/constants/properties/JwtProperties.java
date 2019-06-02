@@ -62,7 +62,7 @@ public class JwtProperties {
 	}
 
 	public Long getExpirationInMillis() {
-		return expiration * 60 * 1000;
+		return expiration * 60 * 60 * 100000;
 	}
 
 	public void setExpiration(Long expiration) {

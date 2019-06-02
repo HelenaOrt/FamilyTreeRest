@@ -80,8 +80,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.antMatchers(HttpMethod.GET).permitAll()
 			.antMatchers(HttpMethod.DELETE).hasAuthority(AuthorityName.ROLE_ADMIN.toString())
 			.antMatchers("/auth/login").permitAll()
-			.anyRequest().permitAll();
-			//.anyRequest().hasAnyRole("ADMIN", "USER");
+			.anyRequest().hasAnyRole("ADMIN", "USER");
 	}
 
 }
