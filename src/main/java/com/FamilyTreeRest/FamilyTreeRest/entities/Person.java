@@ -1,11 +1,10 @@
 package com.FamilyTreeRest.FamilyTreeRest.entities;
 
-import com.FamilyTreeRest.FamilyTreeRest.exceptions.IllegalOperationException;
-
 import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -33,8 +32,8 @@ public class Person {
 	@ManyToOne
 	private Person father;
 
-	@OneToMany(mappedBy = "father", cascade ={CascadeType.REMOVE, CascadeType.REFRESH})
-	private Set<Person> sonsSet;
+	@OneToMany(mappedBy = "father", cascade = {CascadeType.REFRESH})
+	private Set<Person> sonsSet = new HashSet<>();
 
 
 	public long getId() {

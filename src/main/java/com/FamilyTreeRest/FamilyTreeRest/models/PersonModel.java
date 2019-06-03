@@ -9,6 +9,7 @@ import com.FamilyTreeRest.FamilyTreeRest.entities.Person;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -23,7 +24,6 @@ public class PersonModel {
 
 	@NotNull
 	@Size(min = 3)
-
 	private String lastName;
 
 	@Min(0)
@@ -33,7 +33,9 @@ public class PersonModel {
 	@Size(min = 3)
 	private String country;
 
-	private Set<PersonModel> sonsSet;
+	private Long fatherId;
+
+	private Set<PersonModel> sonsSet = new HashSet<>();
 
 	public static PersonModel from(Person person) {
 		PersonModel personModel = new PersonModel();
@@ -42,9 +44,19 @@ public class PersonModel {
 		personModel.setLastName(person.getLastName());
 		personModel.setAge(person.getAge());
 		personModel.setCountry(person.getCountry());
-
-		personModel.setSonsSet(person.getSonsSet().stream().map(PersonModel::from).collect(Collectors.toSet()));
+		if (person.getFather() != null)
+			personModel.setFatherId(person.getFather().getId());
+		if (!person.getSonsSet().isEmpty())
+			personModel.setSonsSet(person.getSonsSet().stream().map(PersonModel::from).collect(Collectors.toSet()));
 		return personModel;
+	}
+
+	public Long getFatherId() {
+		return fatherId;
+	}
+
+	public void setFatherId(Long fatherId) {
+		this.fatherId = fatherId;
 	}
 
 	public Optional<Long> getId() {
@@ -91,9 +103,6 @@ public class PersonModel {
 		return sonsSet;
 	}
 
-	public void addSonModel(PersonModel personModel){
-		sonsSet.add(personModel);
-	}
 
 	public void setSonsSet(Set<PersonModel> sonsSet) {
 		this.sonsSet = sonsSet;

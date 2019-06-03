@@ -9,7 +9,6 @@ import com.FamilyTreeRest.FamilyTreeRest.exceptions.EntityNotFoundException;
 import com.FamilyTreeRest.FamilyTreeRest.exceptions.IdRequiredException;
 import com.FamilyTreeRest.FamilyTreeRest.exceptions.IllegalOperationException;
 import com.FamilyTreeRest.FamilyTreeRest.models.PersonModel;
-import com.FamilyTreeRest.FamilyTreeRest.models.PersonModelSave;
 import com.FamilyTreeRest.FamilyTreeRest.services.PersonService;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,14 +36,14 @@ public class PersonController {
 	}
 
 	@PostMapping("/people")
-	public PersonModelSave save(@Valid @RequestBody PersonModelSave personModelSave) throws Exception {
-		return personService.save(personModelSave);
+    public PersonModel save(@Valid @RequestBody PersonModel personModel) throws Exception {
+        return personService.save(personModel);
 	}
 
 	@PutMapping("/people/{id}")
-	public PersonModelSave update(@PathVariable long id, @RequestBody PersonModelSave personModelSave)
+    public PersonModel update(@Valid @PathVariable long id, @RequestBody PersonModel personModel)
 			throws DuplicatedEntityException, IdRequiredException, IllegalOperationException, EntityNotFoundException {
-		return personService.update(id, personModelSave);
+        return personService.update(id, personModel);
 	}
 
 	@DeleteMapping("/people/{id}")
