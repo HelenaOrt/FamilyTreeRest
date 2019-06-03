@@ -13,7 +13,6 @@ import com.FamilyTreeRest.FamilyTreeRest.repositories.PersonRepository;
 import com.FamilyTreeRest.FamilyTreeRest.services.PersonService;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -21,84 +20,95 @@ import java.util.stream.Collectors;
 @Service
 public class PersonServiceImpl implements PersonService {
 
-    private final PersonRepository personRepository;
+	private final PersonRepository personRepository;
 
-    public PersonServiceImpl(PersonRepository personRepository) {
-        this.personRepository = personRepository;
-    }
+	public PersonServiceImpl(PersonRepository personRepository) {
+		this.personRepository = personRepository;
+	}
 
-    @Override
-    public List<PersonModel> findAll() {
-        return personRepository.findAll().stream()
-                .map(PersonModel::from)
-                .collect(Collectors.toList());
-    }
+	@Override
+	public List<PersonModel> findAll() {
+		return personRepository.findAll().stream()
+							   .map(PersonModel::from)
+							   .collect(Collectors.toList());
+	}
 
-    @Override
-    public PersonModel findOne(long id) throws EntityNotFoundException {
-        return personRepository.findById(id)
-                .map(PersonModel::from)
-                .orElseThrow(() -> new EntityNotFoundException(Person.class, id));
-    }
+	@Override
+	public PersonModel findOne(long id) throws EntityNotFoundException {
+		return personRepository.findById(id)
+							   .map(PersonModel::from)
+							   .orElseThrow(() -> new EntityNotFoundException(Person.class, id));
+	}
 
-    @Override
-    public PersonModel save(PersonModel personModel) throws Exception {
-        Person person = new Person();
+	@Override
+	public PersonModel save(PersonModel personModel) throws Exception {
+		Person person = new Person();
 
-        if (personModel.getFatherId() == null) {
-            person.setFather(null);
-            person.setSonsSet(null);
-            person.setLastName(personModel.getLastName());
-        } else {
-            long fatherModelId = personModel.getFatherId();
+		if (personModel.getFatherId() == null) {
+			person.setFather(null);
+		} else {
+			long fatherModelId = personModel.getFatherId();
+			fatherExceptions(personModel, person, fatherModelId);
+		}
 
-            Person fatherRepository = personRepository.findById(fatherModelId)
-                    .orElseThrow(() -> new EntityNotFoundException(Person.class, fatherModelId));
+		person.setName(personModel.getName());
+		person.setLastName(personModel.getLastName());
+		person.setCountry(personModel.getCountry());
+		person.setAge(personModel.getAge());
 
-            if (!fatherRepository.getLastName().equalsIgnoreCase(personModel.getLastName()))
-                throw new IllegalOperationException("El padre y el hijo tienen que tener el mismo apellido");
-            if (personModel.getAge() >= fatherRepository.getAge())
-                throw new IllegalOperationException("El hijo no puede ser mayor que el padre");
-            person.setFather(fatherRepository);
-            person.setLastName(personModel.getLastName());
-        }
+		return PersonModel.from(personRepository.save(person));
 
-        person.setName(personModel.getName());
-        person.setAge(personModel.getAge());
-        person.setCountry(personModel.getCountry());
+	}
 
-        return PersonModel.from(personRepository.save(person));
+	@Override
+	public PersonModel update(long id, PersonModel personModel) throws EntityNotFoundException, IdRequiredException, IllegalOperationException {
+		long modelId = personModel.getId().orElseThrow(IdRequiredException::new);
 
-    }
+		if (id != modelId)
+			throw new IllegalOperationException("El id introducido no coincide con la búsqueda realizada");
 
+		Person person = personRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(Person.class, id));
 
-    @Override
-    public PersonModel update(long id, PersonModel personModel) throws EntityNotFoundException, IdRequiredException, IllegalOperationException {
-        long modelId = personModel.getId().orElseThrow(IdRequiredException::new);
+		if (personModel.getFatherId() == null) {
+			person.setFather(null);
+		} else {
+			long fatherModelId = personModel.getFatherId();
+			if (fatherModelId == id) {
+				throw new IllegalOperationException("No puede ser padre de sí mismo");
+			}
+			fatherExceptions(personModel, person, fatherModelId);
+		}
+		personSetters(personModel, person);
 
-        if (id != modelId)
-            throw new IllegalOperationException("El introducido no coincide con la búsqueda realizada");
+		return PersonModel.from(personRepository.save(person));
 
-        Person person = personRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(Person.class, id));
+	}
 
-        /*Person fatherRepository = fatherExceptions(personModel, person);
+	@Override
+	public void delete(long id) throws EntityNotFoundException {
+		Person person = personRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(Person.class, id));
+		Set<Person> personHashSet = person.getSonsSet().stream().filter(child -> child.getFather().getId() == id).collect(Collectors.toSet());
+		personHashSet.forEach(child -> child.setFather(null));
+		personRepository.delete(person);
+	}
 
-        person.setFather(fatherRepository);
-        person.setName(personModel.getName());
-        person.setCountry(personModel.getCountry());
-        person.setAge(personModel.getAge());*/
+	private void fatherExceptions(PersonModel personModel, Person person, long fatherModelId) throws EntityNotFoundException, IllegalOperationException {
+		Person fatherRepository = personRepository.findById(fatherModelId)
+												  .orElseThrow(() -> new EntityNotFoundException(Person.class, fatherModelId));
 
-        return PersonModel.from(personRepository.save(person));
+		if (!fatherRepository.getLastName().equalsIgnoreCase(personModel.getLastName()))
+			throw new IllegalOperationException("El padre y el hijo tienen que tener el mismo apellido");
+		if (personModel.getAge() >= fatherRepository.getAge())
+			throw new IllegalOperationException("El hijo no puede ser mayor que el padre");
+		person.setFather(fatherRepository);
+	}
 
-    }
-
-    @Override
-    public void delete(long id) throws EntityNotFoundException {
-        Person person = personRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(Person.class, id));
-		Set<Person> personHashSet = person.getSonsSet().stream().filter(child->child.getFather().getId() == id).collect(Collectors.toSet());
-		personHashSet.forEach(child->child.setFather(null));
-		person.getSonsSet().clear();
-        personRepository.delete(person);
-    }
-
+	private void personSetters(PersonModel personModel, Person person) {
+		person.setName(personModel.getName());
+		person.setLastName(personModel.getLastName());
+		person.setCountry(personModel.getCountry());
+		person.setAge(personModel.getAge());
+	}
 }
+
+
