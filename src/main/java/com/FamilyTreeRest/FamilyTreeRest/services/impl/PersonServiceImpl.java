@@ -13,7 +13,9 @@ import com.FamilyTreeRest.FamilyTreeRest.repositories.PersonRepository;
 import com.FamilyTreeRest.FamilyTreeRest.services.PersonService;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -93,6 +95,9 @@ public class PersonServiceImpl implements PersonService {
     @Override
     public void delete(long id) throws EntityNotFoundException {
         Person person = personRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(Person.class, id));
+		Set<Person> personHashSet = person.getSonsSet().stream().filter(child->child.getFather().getId() == id).collect(Collectors.toSet());
+		personHashSet.forEach(child->child.setFather(null));
+		person.getSonsSet().clear();
         personRepository.delete(person);
     }
 

@@ -45,7 +45,6 @@ import static org.junit.Assert.assertNotNull;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class DeletePersonTest {
 
-
 	@Autowired
 	private AuthenticationManager authenticationManager;
 
@@ -55,7 +54,9 @@ public class DeletePersonTest {
 	@Autowired
 	private TestRestTemplate testRestTemplate;
 
-/*
+	@Autowired
+	private AuthenticationController authenticationController;
+
 	@Test
 	public void givenValidTermWithoutBeenAuthenticated_shouldFailAndReturn401Unauthorized() {
 
@@ -71,40 +72,24 @@ public class DeletePersonTest {
 
 	@Test
 	public void givenValidTermWithRolAdmin_shouldSucessAndReturn200() {
-		UriComponents url = UriComponentsBuilder.newInstance().scheme("/people").path("/1").build();
 
 		AuthenticationRequest request = new AuthenticationRequest();
 		request.setUsername("Elena");
 		request.setPassword("1234");
 
+		AuthenticationResponse response = authenticationController.getToken(request);
 
-		Authentication authentication = authenticationManager.authenticate(
-				new UsernamePasswordAuthenticationToken(request.getUsername(),
-														request.getPassword()));
+		HttpHeaders httpHeaders  = new HttpHeaders();
+		httpHeaders.set("Authorization", response.getToken());
 
-
-		String token = Jwts.builder()
-						   .signWith(Keys.hmacShaKeyFor(jwtProperties.getSecret().getBytes()))
-						   .setIssuer(jwtProperties.getIssuer())
-						   .setSubject(request.getUsername())
-						   .setExpiration(new Date(System.currentTimeMillis() + jwtProperties.getExpirationInMillis()))
-						   .claim(jwtProperties.getAuthoritiesClaim(), "ADMIN")
-						   .compact();
-
-		AuthenticationResponse response = new AuthenticationResponse(token);
-
-		HttpServletResponse httpServletResponse = (HttpServletResponse) response;
-		httpServletResponse.setHeader("Authorization", response.getToken());
-
-		ResponseEntity<PersonModel> result =
+		ResponseEntity<String> result =
 				testRestTemplate.exchange("/people/1", HttpMethod.DELETE,
-										  new HttpEntity<>(httpServletResponse),
-										  new ParameterizedTypeReference<PersonModel>() {
+										  new HttpEntity<>(httpHeaders),
+										  new ParameterizedTypeReference<String>() {
 										  });
 
 		assertEquals(HttpStatus.OK, result.getStatusCode());
-
-		*/
-
 	}
+
+}
 
